@@ -26,6 +26,8 @@ class AdmInputs extends Migration
             $table->text('observation')->nullable();
             $table->integer('source_id')->unsigned();
             $table->foreign('source_id')->references('id')->on('adm_sources');
+            $table->tinyInteger('type_id')->default('1');
+            // $table->string('referencia')->nullable();
         });
     }
 

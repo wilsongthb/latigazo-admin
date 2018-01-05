@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\AdmInputs;
+use App\Models\AdmBudgets;
 
-class InputsController extends Controller
+class BudgetsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,24 +15,11 @@ class InputsController extends Controller
      */
     public function index()
     {
-        $query = AdmInputs::
-            select(
-                's.title AS source',
-                'i.*'
-            )
-            ->from('adm_inputs AS i')
-            ->leftJoin('adm_sources AS s', 's.id', 'i.source_id')
-            // ->where('s.area_id', request()->area_id);
-            ->where('s.area_id', session('area_id'));
-
-        if(request()->get('today')){
-            $date = date('Y-m-d', time());
-            // dd($date);
-            $query = $query
-                ->whereBetween('i.created_at', [$date.' 00:00:00', $date.' 23:59:59']);
-        }
-        
-        return $query->get();
+        return AdmBudgets::
+            where('reason_id', request()->get('reason_id'))
+            ->orderBy('id', 'DESC')
+            ->limit(5)
+            ->get();
     }
 
     /**
@@ -53,15 +40,11 @@ class InputsController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->all();
-        $reg = new AdmInputs;
-        $reg->quantity = $request->quantity;
-        $reg->observation = $request->observation;
-        $reg->source_id = $request->source_id;
-        $reg->type_id = $request->type_id;
+        $reg = new AdmBudgets;
+        $reg->reason_id = $request->reason_id;
+        $reg->max = $request->max;
         $reg->user_id = auth()->user()->id;
         $reg->save();
-        return $reg;
     }
 
     /**
@@ -106,9 +89,6 @@ class InputsController extends Controller
      */
     public function destroy($id)
     {
-        // $reg = AdmInputs::find($id);
-        // $reg->enable = false;
-        // $reg->save();
-        AdmInputs::destroy($id);
+        //
     }
 }

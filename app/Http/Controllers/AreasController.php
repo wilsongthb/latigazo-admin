@@ -1,13 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\AdmInputs;
+use App\Models\Areas;
 
-class InputsController extends Controller
+class AreasController extends Controller
 {
+    function SetArea(Request $request){
+        session()->start();
+        session(['area_id' => $request->area_id]);
+        session()->save();
+        return session()->all();
+    }
+
+    function GetArea(){
+        // dd(session('area_id'));
+        return Areas::find(session('area_id'));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,24 +26,7 @@ class InputsController extends Controller
      */
     public function index()
     {
-        $query = AdmInputs::
-            select(
-                's.title AS source',
-                'i.*'
-            )
-            ->from('adm_inputs AS i')
-            ->leftJoin('adm_sources AS s', 's.id', 'i.source_id')
-            // ->where('s.area_id', request()->area_id);
-            ->where('s.area_id', session('area_id'));
-
-        if(request()->get('today')){
-            $date = date('Y-m-d', time());
-            // dd($date);
-            $query = $query
-                ->whereBetween('i.created_at', [$date.' 00:00:00', $date.' 23:59:59']);
-        }
-        
-        return $query->get();
+        return Areas::where('enable', true)->get();
     }
 
     /**
@@ -53,15 +47,10 @@ class InputsController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->all();
-        $reg = new AdmInputs;
-        $reg->quantity = $request->quantity;
-        $reg->observation = $request->observation;
-        $reg->source_id = $request->source_id;
-        $reg->type_id = $request->type_id;
+        $reg = new Areas;
+        $reg->name = strtoupper($request->name);
         $reg->user_id = auth()->user()->id;
         $reg->save();
-        return $reg;
     }
 
     /**
@@ -95,7 +84,10 @@ class InputsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $reg = Areas::find($id);
+        $reg->name = strtoupper($request->name);
+        $reg->user_id = auth()->user()->id;
+        $reg->save();
     }
 
     /**
@@ -106,9 +98,9 @@ class InputsController extends Controller
      */
     public function destroy($id)
     {
-        // $reg = AdmInputs::find($id);
-        // $reg->enable = false;
-        // $reg->save();
-        AdmInputs::destroy($id);
+        // Areas::destroy($id);
+        Areas
+            ::where('id', $id)
+            ->update(['enable' => false]);
     }
 }

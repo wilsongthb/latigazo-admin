@@ -25,6 +25,12 @@ class AdmReasons extends Migration
             $table->text('description')->nullable();
             $table->integer('area_id')->unsigned();
             $table->foreign('area_id')->references('id')->on('areas');
+
+            $table->boolean('require_authorizer')->default(false); // requiere autorizacion
+            $table->integer('authorizer_id')->unsigned()->nullable();
+
+            $table->boolean('free')->default(false);
+            // $table->foreign('authorizer_id')->references('id')->on('users');
         });
     }
 

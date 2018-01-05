@@ -20,7 +20,8 @@ class AdmSeeder extends Seeder
             $entradas[] = [
                 'user_id' => '1',
                 'quantity' => $faker->randomFloat(2, 0, 400),
-                'source_id' => $faker->numberBetween(1, count($fuentes))
+                'source_id' => $faker->numberBetween(1, count($fuentes)),
+                'created_at' => new DateTime
             ];
         }
         
@@ -48,8 +49,10 @@ class AdmSeeder extends Seeder
                     echo "registrando $quantity" . PHP_EOL;
                     DB::table('adm_outputs')->insert([
                         'budget_id' => $lastBudget->id,
+                        'reason_id' => $lastBudget->reason_id,
                         'quantity' => $quantity,
-                        'user_id' => '1'
+                        'user_id' => '1',
+                        'created_at' => new DateTime
                     ]);
                 }
             }

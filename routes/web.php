@@ -19,12 +19,26 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('admin', function () {
+Route::get('admin/{a?}', function () {
     return view('admin.index');
 })->middleware('auth');
 
-Route::group(['prefix' => 'rsc'], function () {
+Route::get('views/{view}', function($view){
+    return view('admin.templates.'.$view);
+});
+
+Route::group([
+    'prefix' => 'rsc',
+    'middleware' => 'auth'
+], function () {
+    Route::get('session', function(){dd(session()->all());});
+    Route::put('areas/set-area', 'AreasController@SetArea');
+    Route::put('areas/get-area', 'AreasController@GetArea');
+    Route::resource('areas', 'AreasController');
     Route::resource('inputs', 'Admin\InputsController');
     Route::resource('outputs', 'Admin\OutputsController');
     Route::resource('reasons', 'Admin\ReasonsController');
+    Route::resource('budgets', 'Admin\BudgetsController');
+    Route::resource('sources', 'Admin\SourcesController');
+    Route::get('users', 'UsersController@index');
 });

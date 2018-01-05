@@ -30,7 +30,8 @@ class AdmBSeeder extends Seeder
             ['title' => 'VENTA', 'area_id' => '2', 'user_id' => '1'],
             ['title' => 'REGALO', 'area_id' => '3', 'user_id' => '1'],
             ['title' => 'DEVOLUCION', 'area_id' => '3', 'user_id' => '1'],
-            ['title' => 'INVERSION EXTERNA', 'area_id' => '2', 'user_id' => '1']
+            ['title' => 'INVERSION EXTERNA', 'area_id' => '2', 'user_id' => '1'],
+            ['title' => 'CAFETERIA', 'area_id' => '2', 'user_id' => '1'],
         ]);
 
         DB::table('adm_reasons')->insert([
@@ -39,7 +40,7 @@ class AdmBSeeder extends Seeder
             ['title' => 'DEVOLUCIONES', 'area_id' => '2', 'user_id' => '1'],
             ['title' => 'REGALO', 'area_id' => '3', 'user_id' => '1'],
             ['title' => 'PAGOS', 'area_id' => '3', 'user_id' => '1'],
-            ['title' => 'VARIOS', 'area_id' => '2', 'user_id' => '1']
+            ['title' => 'VARIOS', 'area_id' => '2', 'user_id' => '1'],
         ]);
 
         $reasons = DB::table('adm_reasons')->get();
