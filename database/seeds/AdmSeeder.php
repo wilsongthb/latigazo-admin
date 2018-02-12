@@ -34,7 +34,8 @@ class AdmSeeder extends Seeder
                 ->orderBy('id', 'DESC')
                 ->first();
             
-            if(count($lastBudget) === 1){
+            // if(count($lastBudget) === 1){
+            if($lastBudget){
                 $total = DB::select(
                     "SELECT 
                         IFNULL(SUM(o.quantity), 0) AS total
